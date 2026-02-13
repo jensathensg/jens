@@ -130,7 +130,6 @@ val_m4 <- m4p - 4*m1p*m3p + 6*(m1p^2)*m2p - 3*(m1p^4)
 
 cat("\n VERIFY \n")
 
-# --- Simple aligned printer (reuses your print_row / print_sep if you have them) ---
 headers3 <- c("Relation", "Value")
 widths3  <- c(50, 12)
 
