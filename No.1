@@ -1,0 +1,15 @@
+import numpy as np
+
+observed = np.array([24, 108, 95, 23])
+expected = np.array([30, 90, 90, 30])
+
+chi_square = np.sum((observed - expected)**2 / expected)
+
+critical_value = 7.815
+
+print("Chi-square value:", chi_square)
+
+if chi_square < critical_value:
+    print("Fail to reject H0 (coins are fair)")
+else:
+    print("Reject H0 (coins are not fair)")
