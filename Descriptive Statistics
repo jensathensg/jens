@@ -1,0 +1,17 @@
+data("PlantGrowth")
+PlantGrowth$group <- as.factor(PlantGrowth$group)
+
+cat("\n----------------------\n")
+cat("DESCRIPTIVE STATISTICS")
+cat("\n----------------------\n")
+
+aggregate(weight ~ group, data = PlantGrowth, function(x) {
+  c(
+    mean   = mean(x),
+    median = median(x),
+    sd     = sd(x),
+    min    = min(x),
+    max    = max(x),
+    n      = length(x)
+  )
+})
