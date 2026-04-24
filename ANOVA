@@ -1,0 +1,15 @@
+data("PlantGrowth")
+PlantGrowth$group <- as.factor(PlantGrowth$group)
+
+cat("------------------\n")
+cat("TEST OF VARIANCES\n")
+cat("------------------\n")
+
+bartlett.test(weight ~ group, data = PlantGrowth)
+
+cat("-------------\n")
+cat("ONE-WAY ANOVA\n")
+cat("-------------\n")
+
+anova_model <- aov(weight ~ group, data = PlantGrowth)
+summary(anova_model)
