@@ -1,0 +1,8 @@
+data("PlantGrowth")
+PlantGrowth$group <- as.factor(PlantGrowth$group)
+
+boxplot(weight ~ group, data = PlantGrowth,
+        main = "Plant Weight by Group",
+        col = c("#AEC6CF", "#FFB7C5", "#CBAACB"),
+        boxwex = 0.4,
+        border = "gray40")
