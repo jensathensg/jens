@@ -1,0 +1,133 @@
+library(ggplot2)
+library(dplyr)
+
+url <- "https://raw.githubusercontent.com/resbaz/r-novice-gapminder-files/master/data/gapminder-FiveYearData.csv"
+gap <- read.csv(url)
+
+g2007 <- gap %>% filter(year == 2007)
+
+str(g2007)
+dim(g2007)
+colSums(is.na(g2007))
+
+cat("Number of observations:", nrow(g2007), "\n")
+cat("Number of variables:", ncol(g2007), "\n")
+
+summary(g2007[, c("lifeExp", "gdpPercap")])
+
+g2007 %>%
+  summarise(
+    min_life = min(lifeExp),
+    Q1_life = quantile(lifeExp, .25),
+    median_life = median(lifeExp),
+    mean_life = mean(lifeExp),
+    Q3_life = quantile(lifeExp, .75),
+    max_life = max(lifeExp),
+    sd_life = sd(lifeExp),
+    min_gdp = min(gdpPercap),
+    Q1_gdp = quantile(gdpPercap, .25),
+    median_gdp = median(gdpPercap),
+    mean_gdp = mean(gdpPercap),
+    Q3_gdp = quantile(gdpPercap, .75),
+    max_gdp = max(gdpPercap),
+    sd_gdp = sd(gdpPercap)
+  )
+
+ggplot(g2007, aes(x = lifeExp)) +
+  geom_histogram(bins = 15, color = "black", fill = "grey80") +
+  labs(title = "Life Expectancy in 2007",
+       x = "Life Expectancy", y = "Number of Countries")
+
+ggplot(g2007, aes(x = gdpPercap)) +
+  geom_histogram(bins = 20, color = "black", fill = "grey80") +
+  labs(title = "GDP per Capita in 2007",
+       x = "GDP per Capita", y = "Number of Countries")
+
+ggplot(g2007, aes(x = lifeExp)) +
+  geom_density() +
+  labs(title = "Life Expectancy Density",
+       x = "Life Expectancy", y = "Density")
+
+ggplot(g2007, aes(x = gdpPercap)) +
+  geom_density() +
+  labs(title = "GDP per Capita Density",
+       x = "GDP per Capita", y = "Density")
+
+ggplot(g2007, aes(y = gdpPercap)) +
+  geom_boxplot() +
+  labs(title = "GDP per Capita Boxplot",
+       y = "GDP per Capita")
+
+out <- boxplot.stats(g2007$gdpPercap)$out
+g2007 %>% filter(gdpPercap %in% out) %>%
+  select(country, gdpPercap)
+
+ggplot(g2007, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "loess", se = FALSE) +
+  labs(title = "Life Expectancy vs GDP per Capita",
+       x = "GDP per Capita", y = "Life Expectancy")
+
+cor(g2007$lifeExp, g2007$gdpPercap)
+
+g2007$log_gdp <- log(g2007$gdpPercap)
+
+ggplot(g2007, aes(x = log_gdp)) +
+  geom_histogram(bins = 15, color = "black", fill = "grey80") +
+  labs(title = "Log GDP per Capita",
+       x = "log(GDP per Capita)", y = "Number of Countries")
+
+ggplot(g2007, aes(x = log_gdp, y = lifeExp)) +
+  geom_point() +
+  geom_smooth(method = "loess", se = FALSE) +
+  labs(title = "Life Expectancy vs Log GDP",
+       x = "log(GDP per Capita)", y = "Life Expectancy")
+
+cor(g2007$lifeExp, g2007$log_gdp)
+
+h_original <- boxplot.stats(g2007$gdpPercap)$stats[c(2,3,4)]
+h_log <- boxplot.stats(g2007$log_gdp)$stats[c(2,3,4)]
+
+ratio_original <- (h_original[3] - h_original[2]) /
+  (h_original[2] - h_original[1])
+
+ratio_log <- (h_log[3] - h_log[2]) /
+  (h_log[2] - h_log[1])
+
+cat("Original GDP hinge ratio:", ratio_original, "\n")
+cat("Log GDP hinge ratio:", ratio_log, "\n")
+
+model1 <- lm(lifeExp ~ gdpPercap, data = g2007)
+model2 <- lm(lifeExp ~ log_gdp, data = g2007)
+
+summary(model1)
+summary(model2)
+
+coef(model1)
+coef(model2)
+
+data.frame(
+  Model = c("GDP", "Log GDP"),
+  R_squared = c(summary(model1)$r.squared,
+                summary(model2)$r.squared),
+  Residual_SE = c(sigma(model1), sigma(model2))
+)
+
+g2007$resid1 <- resid(model1)
+g2007$fitted1 <- fitted(model1)
+
+ggplot(g2007, aes(x = fitted1, y = resid1)) +
+  geom_point() +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(title = "Residuals vs Fitted - Model 1",
+       x = "Fitted Values", y = "Residuals")
+
+g2007$resid2 <- resid(model2)
+g2007$fitted2 <- fitted(model2)
+
+ggplot(g2007, aes(x = fitted2, y = resid2)) +
+  geom_point() +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(title = "Residuals vs Fitted - Model 2",
+       x = "Fitted Values", y = "Residuals")
