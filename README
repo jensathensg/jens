@@ -1,0 +1,30 @@
+========================
+FA 5 - LINEAR MODELS
+Polmer Penguins Dataset
+Jens Athens E. Gumawid 
+========================
+
+Reaserch Question 
+Does penguin body mass differ according to species and sex, and does the effect of species on body mass depend on sex?
+Penguin body mass differs according to its sex and species. Based on the analysis, Gentoo penguins have the highest average body mass, while Adelie and Chinstrap penguins have lower average body masses. Male penguins are heavier than female penguins across the three species. 
+
+Dataset Description
+This dataset uses the Plamer Penguins dataset, which contains information about penguins observed in Palmer Archipelago in Antartica
+This analysis focuses on the following variables:
+Body Mass - Penguin body mass in grams (response variable) 
+Species - Penguin species including Adelie, Chinstrap, and Gentoo
+Sex - Penguin sex (Female or Male)
+
+Dataset Source 
+The dataset was obtaiend from: https://github.com/allisonhorst/palmerpenguins
+CSV file: https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv
+
+Statistical Methods 
+Data Preparation - To import dataset, check for the missing values and observation.
+Exploratory Data Analysis - To calculate descriptive statistics and create boxplot and an interaction plot. 
+One-WAY ANOVA - Used to test whether the mean body mass differs among penguin species. 
+Dummy-Variable Regression - To compare the mean body mass of each species using the reference category, Adelie.
+Two-WAY ANOVA - Used to examine the effects of species, sec, and their interaction on body mass. 
+
+Summary of Findings
+The analysis shows that the body mass of penguin differs according to species and sex. Gento penguins have the highest average body mass, while the male penguins are heavier than female penguins. 
